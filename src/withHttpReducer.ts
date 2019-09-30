@@ -1,7 +1,7 @@
-import { withHttpActionType } from './actionTypeFormatters';
+import { withHttpActionType } from "./actionTypeFormatters";
 
-import { IAnyAction, IWithHttpReducerInitialState } from './interfaces';
-import { Reducer } from './types';
+import { IAnyAction, IWithHttpReducerInitialState } from "./interfaces";
+import { Reducer } from "./types";
 
 export const withHttpReducerInitialState: IWithHttpReducerInitialState = {
   httpError: null,

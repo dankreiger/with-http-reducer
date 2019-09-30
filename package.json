@@ -33,7 +33,7 @@
     "sort": "sort-package-json",
     "test": "jest --config jestconfig.json",
     "preversion": "npm run lint",
-    "version": "npm run format && git add -A src",
+    "version": "npm run format && git add -A src && npm version patch",
     "postversion": "git push && git push --tags"
   },
   "husky": {
@@ -44,7 +44,7 @@
   },
   "lint-staged": {
     "src/**/*.{js,tsx,jsx,json,css}": [
-      "prettier --single-quote --write",
+      "prettier --write",
       "git add"
     ]
   },
