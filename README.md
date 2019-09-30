@@ -13,6 +13,7 @@ $ npm install with-http-reducer
 ## Todo
 
 - fix module exporting so imports can be destructured
+- organize `src` so helpers are more compact and easy to use
 - more tests
 - update docs to describe functionality
 - fix the issues with module exports
