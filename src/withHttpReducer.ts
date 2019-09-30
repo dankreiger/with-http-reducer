@@ -19,7 +19,7 @@ export default function withHttpReducer(
   reducer: Reducer,
   reducerName?: string
 ) {
-  return (state: any = withHttpReducerInitialState, action: IAnyAction) => {
+  return (state: any = {}, action: IAnyAction) => {
     const combinedState = {
       ...withHttpReducerInitialState,
       ...reducer(state, action)
