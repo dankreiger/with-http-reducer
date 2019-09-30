@@ -9,6 +9,13 @@ export const withHttpReducerInitialState: IWithHttpReducerInitialState = {
 };
 
 const returnState = (combinedState: any, payload?: any) => {
+  // for default payload objects
+  if (payload && Object.keys(payload)[0] === 'payload') {
+    const realPayload = payload.payload;
+    if (realPayload && Object.keys(realPayload).length) {
+      return { ...combinedState, ...realPayload };
+    }
+  }
   if (payload) {
     return { ...combinedState, ...payload };
   }
