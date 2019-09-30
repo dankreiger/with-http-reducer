@@ -1,7 +1,7 @@
-import { withHttpActionType } from "./actionTypeFormatters";
+import { withHttpActionType } from './actionTypeFormatters';
 
-import { IAnyAction, IWithHttpReducerInitialState } from "./interfaces";
-import { Reducer } from "./types";
+import { IAnyAction, IWithHttpReducerInitialState } from './interfaces';
+import { Reducer } from './types';
 
 export const withHttpReducerInitialState: IWithHttpReducerInitialState = {
   httpError: null,
@@ -20,7 +20,10 @@ export default function withHttpReducer(
   reducerName?: string
 ) {
   return (state: any = withHttpReducerInitialState, action: IAnyAction) => {
-    const combinedState = { ...withHttpReducerInitialState, ...state };
+    const combinedState = {
+      ...withHttpReducerInitialState,
+      ...reducer(state, action)
+    };
     const { BEGIN, SUCCESS, FAILURE } = withHttpActionType(reducerName);
     const { type, payload } = action;
     switch (type) {
