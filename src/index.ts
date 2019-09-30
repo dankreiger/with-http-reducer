@@ -1,4 +1,4 @@
-import { httpBegin, httpSuccess, httpFailure } from './actionTypeFormatters';
+import { httpBegin, httpFailure, httpSuccess } from './actionTypeFormatters';
 import { withHttpReducer } from './withHttpReducer';
 
 const reduxAsync = {
