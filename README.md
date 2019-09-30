@@ -27,3 +27,7 @@ const users = (state = { current: null }, { type, payload }) => {
 // 'users' string param is optional
 export default withHttpReducer(users, 'users');
 ```
+
+### Todo:
+
+- more tests
