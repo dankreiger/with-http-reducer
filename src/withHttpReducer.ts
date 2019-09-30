@@ -8,11 +8,11 @@ export const withHttpReducerInitialState: IWithHttpReducerInitialState = {
   loading: false
 };
 
-const returnState = (state: any, payload?: any) => {
+const returnState = (combinedState: any, payload?: any) => {
   if (payload) {
-    return { ...state, ...payload };
+    return { ...combinedState, ...payload };
   }
-  return state;
+  return combinedState;
 };
 
 export default function withHttpReducer(
@@ -20,28 +20,29 @@ export default function withHttpReducer(
   reducerName?: string
 ) {
   return (state: any = withHttpReducerInitialState, action: IAnyAction) => {
+    const combinedState = { ...withHttpReducerInitialState, ...state };
     const { BEGIN, SUCCESS, FAILURE } = withHttpActionType(reducerName);
     const { type, payload } = action;
     switch (type) {
       case BEGIN:
         return {
-          ...returnState(state, payload),
+          ...returnState(combinedState, payload),
           httpError: null,
           loading: true
         };
       case SUCCESS:
         return {
-          ...returnState(state, payload),
+          ...returnState(combinedState, payload),
           loading: false
         };
       case FAILURE:
         return {
-          ...returnState(state, payload),
+          ...returnState(combinedState, payload),
           httpError: true,
           loading: false
         };
       default:
-        return reducer(state, action);
+        return reducer(combinedState, action);
     }
   };
 }
