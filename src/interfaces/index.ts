@@ -1,17 +1,17 @@
-export interface Action<T = any> {
+export interface IAction<T = any> {
   type: T;
 }
 
-export interface AnyAction extends Action {
+export interface IAnyAction extends Action {
   [extraProps: string]: any;
 }
 
-export interface WithHttpReducerInitialState {
+export interface IWithHttpReducerInitialState {
   loading: boolean;
   httpError: any;
 }
 
-export interface WithHttpReducerActionTypes {
+export interface IWithHttpReducerActionTypes {
   BEGIN: string;
   SUCCESS: string;
   FAILURE: string;

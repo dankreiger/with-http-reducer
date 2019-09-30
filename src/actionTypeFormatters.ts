@@ -1,7 +1,7 @@
 import { WithHttpReducerActionTypes } from './interfaces';
 import { ReducerName } from './types';
 function formatActionType(reducerName?: ReducerName): string {
-  let result =
+  const result =
     (reducerName && reducerName.replace(/([A-Z])/g, '_$1').toUpperCase()) || '';
   return result.length ? `_${result}_` : '_';
 }
@@ -19,8 +19,8 @@ export function withHttpActionType(
 ): WithHttpReducerActionTypes {
   return {
     BEGIN: HTTP_BEGIN(reducerName),
-    SUCCESS: HTTP_SUCCESS(reducerName),
-    FAILURE: HTTP_FAILURE(reducerName)
+    FAILURE: HTTP_FAILURE(reducerName),
+    SUCCESS: HTTP_SUCCESS(reducerName)
   };
 }
 

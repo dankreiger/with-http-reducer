@@ -1,10 +1,11 @@
-import { Reducer } from './types';
-import { AnyAction, WithHttpReducerInitialState } from './interfaces';
 import { withHttpActionType } from './actionTypeFormatters';
 
-export const withHttpReducerInitialState: WithHttpReducerInitialState = {
-  loading: false,
-  httpError: null
+import { IAnyAction, IWithHttpReducerInitialState } from './interfaces';
+import { Reducer } from './types';
+
+export const withHttpReducerInitialState: IWithHttpReducerInitialState = {
+  httpError: null,
+  loading: false
 };
 
 const returnState = (state: any, payload?: any) => {
@@ -18,15 +19,15 @@ export default function withHttpReducer(
   reducer: Reducer,
   reducerName?: string
 ) {
-  return (state: any = withHttpReducerInitialState, action: AnyAction) => {
+  return (state: any = withHttpReducerInitialState, action: IAnyAction) => {
     const { BEGIN, SUCCESS, FAILURE } = withHttpActionType(reducerName);
     const { type, payload } = action;
     switch (type) {
       case BEGIN:
         return {
           ...returnState(state, payload),
-          loading: true,
-          httpError: null
+          httpError: null,
+          loading: true
         };
       case SUCCESS:
         return {
@@ -36,11 +37,11 @@ export default function withHttpReducer(
       case FAILURE:
         return {
           ...returnState(state, payload),
-          loading: false,
-          httpError: true
+          httpError: true,
+          loading: false
         };
       default:
-        return state;
+        return reducer(state, action);
     }
   };
 }

@@ -4,7 +4,7 @@ import withHttpReducer, {
 
 import { HTTP_BEGIN, httpBegin } from '../actionTypeFormatters';
 import users, { usersInitialState } from '../utils/user.reducer';
-import { AnyAction } from '../interfaces';
+import { IAnyAction } from '../interfaces';
 
 describe('withHttpReducer', () => {
   let initialState: any;
@@ -16,7 +16,7 @@ describe('withHttpReducer', () => {
       newState = {};
     });
     it('sets unnamed reducer state loading to true', () => {
-      const action: AnyAction = httpBegin();
+      const action: IAnyAction = httpBegin();
       newState = withHttpReducer(users)(initialState, action);
 
       expect(newState).toEqual({
@@ -27,7 +27,7 @@ describe('withHttpReducer', () => {
     });
 
     it('sets named reducer state loading to true', () => {
-      const action: AnyAction = httpBegin('users');
+      const action: IAnyAction = httpBegin('users');
       newState = withHttpReducer(users, 'users')(initialState, action);
 
       expect(newState).toEqual({
