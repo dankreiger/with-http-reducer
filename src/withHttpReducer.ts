@@ -15,7 +15,7 @@ const returnState = (combinedState: any, payload?: any) => {
   return combinedState;
 };
 
-export function withHttpReducer(reducer: Reducer, reducerName?: string) {
+export function withHttpReducer(reducer: Reducer, reducerName: string) {
   return (state: any, action: IAnyAction) => {
     const combinedState = {
       ...withHttpReducerInitialState,

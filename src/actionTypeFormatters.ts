@@ -1,21 +1,21 @@
 import { IWithHttpReducerActionTypes } from './interfaces';
 import { ReducerName } from './types';
-function formatActionType(reducerName?: ReducerName): string {
+function formatActionType(reducerName: ReducerName): string {
   const result =
     (reducerName && reducerName.replace(/([A-Z])/g, '_$1').toUpperCase()) || '';
   return result.length ? `_${result}_` : '_';
 }
 
-export const HTTP_BEGIN = (reducerName?: ReducerName) =>
+export const HTTP_BEGIN = (reducerName: ReducerName) =>
   `@@http/FETCH${formatActionType(reducerName)}BEGIN`;
 
-export const HTTP_SUCCESS = (reducerName?: ReducerName) =>
+export const HTTP_SUCCESS = (reducerName: ReducerName) =>
   `@@http/FETCH${formatActionType(reducerName)}SUCCESS`;
-export const HTTP_FAILURE = (reducerName?: ReducerName) =>
+export const HTTP_FAILURE = (reducerName: ReducerName) =>
   `@@http/FETCH${formatActionType(reducerName)}FAILURE`;
 
 export function withHttpActionType(
-  reducerName?: ReducerName
+  reducerName: ReducerName
 ): IWithHttpReducerActionTypes {
   return {
     BEGIN: HTTP_BEGIN(reducerName),
@@ -31,17 +31,17 @@ const actionReturn = (type: string, payload?: string) => {
   return { type };
 };
 
-export const httpBegin = (reducerName?: ReducerName, payload?: any) => {
+export const httpBegin = (reducerName: ReducerName, payload?: any) => {
   const type = HTTP_BEGIN(reducerName);
   return actionReturn(type, payload);
 };
 
-export const httpSuccess = (reducerName?: ReducerName, payload?: any) => {
+export const httpSuccess = (reducerName: ReducerName, payload?: any) => {
   const type = HTTP_SUCCESS(reducerName);
   return actionReturn(type, payload);
 };
 
-export const httpFailure = (reducerName?: ReducerName, payload?: any) => {
+export const httpFailure = (reducerName: ReducerName, payload?: any) => {
   const type = HTTP_FAILURE(reducerName);
   return actionReturn(type, payload);
 };

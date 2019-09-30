@@ -12,10 +12,29 @@ $ npm install with-http-reducer
 
 ## Usage
 
-1. Attach `withHttpReducer` to a reducer, and pass it a name to assign to a specific domain:
+1. Add helpers to a constants file
 
    ```js
-   import { withHttpReducer, HTTP_BEGIN } from 'with-http-reducer';
+   // users.constants.js
+   import whr from 'with-http-reducer';
+
+   export const usersReducerName = 'users';
+
+   export const usersHttpReducer = reducer =>
+     whr.withHttpReducer(reducer, usersReducerName);
+
+   export const usersHttpBegin = payload =>
+     whr.httpBegin(usersReducerName, payload);
+   export const usersHttpFailure = payload =>
+     whr.httpFailure(usersReducerName, payload);
+   export const usersHttpSuccess = payload =>
+     whr.httpSuccess(usersReducerName, payload);
+   ```
+
+2. Attach `withHttpReducer` to a reducer, and pass it a name to assign to a specific domain:
+
+   ```js
+   import { usersHttpReducer } from './users.constants';
 
    const users = (state = { current: null }, { type, payload }) => {
      switch (type) {
@@ -26,33 +45,87 @@ $ npm install with-http-reducer
      }
    };
 
-   // 'users' string param is optional
-   export default withHttpReducer(users, 'users');
+   export default usersHttpReducer(users);
    ```
 
-2. Import actions as needed (supply optional payload - TODO in docs)
+3. Users other helpers where you need them
 
    ```js
-    import from 'with-http-reducer';
-    import React, { useEffect } from 'react';
-    import { useDispatch } from 'react-redux';
-    import whr from 'with-http-reducer';
+   // components
+   import React, { useEffect } from 'react';
+   import { usersHttpBegin } from './users.constants';
 
-    // component
-    export default () => {
-      const dispatch = useDispatch();
-      const loading = useSelector(({loading}) => loading);
-      useEffect(() => {
-        dispatch(whr.httpBegin('users'));
-      }, [fetchUsersBegin, dispatch]);
+   export default () => {
+     const dispatch = useDispatch();
+     const loading = useSelector(({ loading }) => loading);
+     useEffect(() => {
+       dispatch(usersHttpBegin());
+     }, [fetchUsersBegin, dispatch]);
 
-      if(loading) {
-        return <div>loading</div>
-      }
-      return (
-        <div>content</div>
-      )
-    }
+     if (loading) {
+       return <div>loading</div>;
+     }
+     return <div>content</div>;
+   };
+   ```
+
+   ```js
+   // epics
+   import { normalize } from 'normalizr';
+   import { switchMap, map, catchError } from 'rxjs/operators';
+   import { ajax } from 'rxjs/ajax';
+   import { ofType } from 'redux-observable';
+   import {
+     usersHttpBegin,
+     usersHttpSuccess,
+     usersHttpFailure
+   } from './users.constants';
+   import { usersSchema } from './users.schema';
+   import { of } from 'rxjs';
+
+   export function fetchUsersEpic(action$) {
+     return action$.pipe(
+       ofType(usersHttpBegin().type),
+       switchMap(() => {
+         return ajax.getJSON(`someendpoint/users`).pipe(
+           map(users => normalize(users, usersSchema)),
+           map(({ entities, result }) =>
+             usersHttpSuccess({ byId: entities.users, allIds: result })
+           ),
+           catchError(err => of(usersHttpFailure({ err })))
+         );
+       })
+     );
+   }
+   ```
+
+   ```js
+   // sagas
+   import { normalize } from 'normalizr';
+   import { call, put, takeLatest } from 'redux-saga/effects';
+   import {
+     usersHttpBegin,
+     usersHttpSuccess,
+     usersHttpFailure
+   } from './users.constants';
+   function* handleFetchTodosBeginAsync() {
+     try {
+       const response = yield call(fetch('someendpoint/users', action.payload));
+       const usersDictionary = yield normalize(users, usersSchema);
+       yield put(
+         usersHttpSuccess({
+           byId: usersDictionary.entities.users,
+           allIds: usersDictionary.result
+         })
+       );
+     } catch (err) {
+       put(usersHttpFailure({ err }));
+     }
+   }
+
+   export function* watchFetchUsersBegin() {
+     yield takeLatest(usersHttpBegin().type, handleFetchUsersBeginAsync);
+   }
    ```
 
 TODO
@@ -62,3 +135,4 @@ TODO
 - more tests
 - update docs to describe functionality
 - fix the issues with module exports
+- make it clearer in general
