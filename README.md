@@ -2,13 +2,15 @@
 
 [![Build Status](https://travis-ci.org/dankreiger/with-http-reducer.svg?branch=master)](https://travis-ci.org/dankreiger/with-http-reducer)
 
-### Higher order reducer for generic `FETCH_BEGIN`, `FETCH_SUCCESS`, and `FETCH_FAILURE` actions
+Higher order reducer for generic `FETCH_BEGIN`, `FETCH_SUCCESS`, and `FETCH_FAILURE` actions
+
+---
 
 ```sh
 $ npm install with-http-reducer
 ```
 
-### Usage
+## Usage
 
 1. Attach `withHttpReducer` to a reducer, and pass it an optional name to assign to a specific domain:
 
@@ -30,7 +32,9 @@ $ npm install with-http-reducer
 
 2. Import actions as needed with an optional payload
 
-### Todo:
+TODO
+
+## Todo:
 
 - more tests
 - update docs to describe functionality
