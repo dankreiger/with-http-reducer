@@ -139,10 +139,11 @@ $ npm install with-http-reducer
      usersHttpFailure,
      usersReducerName
    } from './users.constants';
+   const api = url => fetch(url).then(res => res.json());
 
    function* handleFetchUsersBeginAsync() {
      try {
-       const response = yield call(fetch('someendpoint/users', action.payload));
+       const users = yield call(api, `someendpoint/users/${payload}`);
        const usersDictionary = yield normalize(users, usersSchema);
        yield put(
          usersHttpSuccess({
