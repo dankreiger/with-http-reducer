@@ -1,4 +1,4 @@
-import { WithHttpReducerActionTypes } from './interfaces';
+import { IWithHttpReducerActionTypes } from './interfaces';
 import { ReducerName } from './types';
 function formatActionType(reducerName?: ReducerName): string {
   const result =
@@ -16,7 +16,7 @@ export const HTTP_FAILURE = (reducerName?: ReducerName) =>
 
 export function withHttpActionType(
   reducerName?: ReducerName
-): WithHttpReducerActionTypes {
+): IWithHttpReducerActionTypes {
   return {
     BEGIN: HTTP_BEGIN(reducerName),
     FAILURE: HTTP_FAILURE(reducerName),

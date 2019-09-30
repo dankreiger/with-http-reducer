@@ -2,7 +2,7 @@ export interface IAction<T = any> {
   type: T;
 }
 
-export interface IAnyAction extends Action {
+export interface IAnyAction extends IAction {
   [extraProps: string]: any;
 }
 
