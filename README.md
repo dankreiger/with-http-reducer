@@ -10,6 +10,13 @@ Higher order reducer for generic `FETCH_BEGIN`, `FETCH_SUCCESS`, and `FETCH_FAIL
 $ npm install with-http-reducer
 ```
 
+## Todo
+
+- fix module exporting so imports can be destructured
+- more tests
+- update docs to describe functionality
+- fix the issues with module exports
+
 ## Usage
 
 1. Add helpers to a constants file
@@ -17,10 +24,11 @@ $ npm install with-http-reducer
    ```js
    // users.constants.js
    import whr from 'with-http-reducer';
+   import { createSelector } from 'reselect';
 
    export const usersReducerName = 'users';
 
-   export const usersHttpReducer = reducer =>
+   export const usersWithHttp = reducer =>
      whr.withHttpReducer(reducer, usersReducerName);
 
    export const usersHttpBegin = payload =>
@@ -29,12 +37,20 @@ $ npm install with-http-reducer
      whr.httpFailure(usersReducerName, payload);
    export const usersHttpSuccess = payload =>
      whr.httpSuccess(usersReducerName, payload);
+
+   // `loading` and `httpError` are added to the state by the http higher order reducer
+   export const selectUsersLoading = createSelector(
+     state => state[usersReducerName].loading
+   );
+   export const selectUsersHttpError = createSelector(
+     state => state[usersReducerName].httpError
+   );
    ```
 
-2. Attach `withHttpReducer` to a reducer, and pass it a name to assign to a specific domain:
+2. Add in higher order reducer:
 
    ```js
-   import { usersHttpReducer } from './users.constants';
+   import { usersWithHttp } from './users.constants';
 
    const users = (state = { current: null }, { type, payload }) => {
      switch (type) {
@@ -46,27 +62,35 @@ $ npm install with-http-reducer
      }
    };
 
-   export default usersHttpReducer(users);
+   export default usersWithHttp(users);
    ```
 
-3. Users other helpers where you need them
+3. Use other helpers where you need them
 
    ```js
    // components
    import React, { useEffect } from 'react';
-   import { usersHttpBegin, usersReducerName } from './users.constants';
+   import {
+     usersHttpBegin,
+     usersReducerName,
+     selectUsersLoading
+   } from './users.constants';
+   import { useSelector, useDispatch } from 'react-redux';
 
    export default () => {
      const dispatch = useDispatch();
-     const loading = useSelector(state => state[usersReducerName].loading);
+     const loading = useSelector(selectUsersLoading);
      useEffect(() => {
        dispatch(usersHttpBegin());
      }, [fetchUsersBegin, dispatch]);
 
-     if (loading) {
-       return <div>loading</div>;
-     }
-     return <div>content</div>;
+     return (
+       <div>
+         {error && <div>something went wrong</div>}
+         {loading && <div>loading...</div>}
+         <div>loading</div>
+       </div>
+     );
    };
    ```
 
@@ -114,7 +138,8 @@ $ npm install with-http-reducer
      usersHttpFailure,
      usersReducerName
    } from './users.constants';
-   function* handleFetchTodosBeginAsync() {
+
+   function* handleFetchUsersBeginAsync() {
      try {
        const response = yield call(fetch('someendpoint/users', action.payload));
        const usersDictionary = yield normalize(users, usersSchema);
@@ -133,12 +158,3 @@ $ npm install with-http-reducer
      yield takeLatest(usersHttpBegin().type, handleFetchUsersBeginAsync);
    }
    ```
-
-TODO
-
-## Todo:
-
-- more tests
-- update docs to describe functionality
-- fix the issues with module exports
-- make it clearer in general
