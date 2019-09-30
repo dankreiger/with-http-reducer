@@ -1,5 +1,5 @@
 import { HTTP_BEGIN, HTTP_FAILURE, HTTP_SUCCESS } from './actionTypeFormatters';
-import htr from './withHttpReducer';
+import { withHttpReducer } from './withHttpReducer';
 
 export const httpAction = (reducerName?: string) => ({
   BEGIN: HTTP_BEGIN(reducerName),
@@ -8,3 +8,7 @@ export const httpAction = (reducerName?: string) => ({
 });
 
 export const withHttpReducer = htr;
+
+const reduxAsync = { httpAction, withHttpReducer };
+
+export default reduxAsync;

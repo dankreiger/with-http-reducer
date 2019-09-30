@@ -15,7 +15,7 @@ $ npm install with-http-reducer
 1. Attach `withHttpReducer` to a reducer, and pass it an optional name to assign to a specific domain:
 
    ```js
-   import withHttpReducer from 'with-http-reducer';
+   import { withHttpReducer } from 'with-http-reducer';
 
    const users = (state = { current: null }, { type, payload }) => {
      switch (type) {
@@ -31,6 +31,14 @@ $ npm install with-http-reducer
    ```
 
 2. Import actions as needed with an optional payload
+
+   ```js
+   import { httpAction } from 'with-http-reducer';
+
+   const UsersPage = () => {
+     use;
+   };
+   ```
 
 TODO
 
