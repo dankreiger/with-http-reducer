@@ -16,6 +16,7 @@ $ npm install with-http-reducer
 - more tests
 - update docs to describe functionality
 - fix the issues with module exports
+- add better typescript interfaces, enums, and types
 
 ## Usage
 

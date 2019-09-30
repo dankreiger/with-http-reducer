@@ -1,9 +1,10 @@
 import { IWithHttpReducerActionTypes } from './interfaces';
 import { ReducerName } from './types';
 function formatActionType(reducerName: ReducerName): string {
-  const result =
+  const reducerNameFormatted =
     (reducerName && reducerName.replace(/([A-Z])/g, '_$1').toUpperCase()) || '';
-  return result.length ? `_${result}_` : '_';
+  // TODO - don't allow a reducer name with no length
+  return reducerNameFormatted.length ? `_${reducerNameFormatted}_` : '_';
 }
 
 export const HTTP_BEGIN = (reducerName: ReducerName) =>
