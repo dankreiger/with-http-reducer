@@ -16,11 +16,11 @@ const HTTP_FAILURE = (reducerName?: string) => f(reducerName);
 const HTTP_SUCCESS = (reducerName?: string) => s(reducerName);
 
 const reduxAsync = {
-  httpAction,
-  withHttpReducer,
   HTTP_BEGIN,
   HTTP_FAILURE,
-  HTTP_SUCCESS
+  HTTP_SUCCESS,
+  httpAction,
+  withHttpReducer
 };
 
 export default reduxAsync;
