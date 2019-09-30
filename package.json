@@ -1,6 +1,6 @@
 {
   "name": "with-http-reducer",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "description": "Higher order reducer that adds standard async actions to a redux reducer",
   "keywords": [
     "async",
