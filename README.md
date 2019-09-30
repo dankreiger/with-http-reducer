@@ -82,17 +82,19 @@ $ npm install with-http-reducer
    export default () => {
      const dispatch = useDispatch();
      const loading = useSelector(selectUsersLoading);
+     const httpError = useSelector(selectUsersHttpError);
      useEffect(() => {
        dispatch(usersHttpBegin());
      }, [fetchUsersBegin, dispatch]);
 
-     return (
-       <div>
-         {error && <div>something went wrong</div>}
-         {loading && <div>loading...</div>}
-         <div>loading</div>
-       </div>
-     );
+     if (httpError) {
+       // show error boundary
+       throw new Error(httpError.message);
+     }
+     if (loading) {
+       return <Spinner />;
+     }
+     return <div>content</div>;
    };
    ```
 
