@@ -1,6 +1,6 @@
 {
   "name": "with-http-reducer",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Higher order reducer that adds standard async actions to a redux reducer",
   "keywords": [
     "async",
@@ -33,7 +33,6 @@
     "sort": "sort-package-json",
     "test": "jest --config jestconfig.json",
     "preversion": "npm run lint",
-    "version": "npm run format && git add . && npm version patch",
     "postversion": "git push && git push --tags"
   },
   "husky": {
