@@ -1,9 +1,9 @@
-import { IWithHttpReducerActionTypes } from "./interfaces";
-import { ReducerName } from "./types";
+import { IWithHttpReducerActionTypes } from './interfaces';
+import { ReducerName } from './types';
 function formatActionType(reducerName?: ReducerName): string {
   const result =
-    (reducerName && reducerName.replace(/([A-Z])/g, "_$1").toUpperCase()) || "";
-  return result.length ? `_${result}_` : "_";
+    (reducerName && reducerName.replace(/([A-Z])/g, '_$1').toUpperCase()) || '';
+  return result.length ? `_${result}_` : '_';
 }
 
 export const HTTP_BEGIN = (reducerName?: ReducerName) =>

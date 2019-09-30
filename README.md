@@ -12,10 +12,10 @@ $ npm install with-http-reducer
 
 ## Usage
 
-1. Attach `withHttpReducer` to a reducer, and pass it an optional name to assign to a specific domain:
+1. Attach `withHttpReducer` to a reducer, and pass it a name to assign to a specific domain:
 
    ```js
-   import { withHttpReducer } from 'with-http-reducer';
+   import { withHttpReducer, HTTP_BEGIN } from 'with-http-reducer';
 
    const users = (state = { current: null }, { type, payload }) => {
      switch (type) {
@@ -30,14 +30,29 @@ $ npm install with-http-reducer
    export default withHttpReducer(users, 'users');
    ```
 
-2. Import actions as needed with an optional payload
+2. Import actions as needed
 
    ```js
-   import { httpAction } from 'with-http-reducer';
+    import from 'with-http-reducer';
+    import React, { useEffect } from 'react';
+    import { useDispatch } from 'react-redux';
+    import whr from 'with-http-reducer';
 
-   const UsersPage = () => {
-     use;
-   };
+    // component
+    export default () => {
+      const dispatch = useDispatch();
+      const loading = useSelector(({loading}) => loading);
+      useEffect(() => {
+        dispatch(whr.HTTP_BEGIN('users'));
+      }, [fetchUsersBegin, dispatch]);
+
+      if(loading) {
+        return <div>loading</div>
+      }
+      return (
+        <div>content</div>
+      )
+    }
    ```
 
 TODO
@@ -46,3 +61,4 @@ TODO
 
 - more tests
 - update docs to describe functionality
+- fix the issues with module exports
