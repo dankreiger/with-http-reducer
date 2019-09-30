@@ -1,0 +1,63 @@
+{
+  "name": "with-http-reducer",
+  "version": "1.0.0",
+  "description": "Higher order reducer that adds standard async actions to a redux reducer",
+  "keywords": [
+    "async",
+    "http",
+    "reducers",
+    "redux"
+  ],
+  "homepage": "https://github.com/dankreiger/with-http-reducer#readme",
+  "bugs": {
+    "url": "https://github.com/dankreiger/with-http-reducer/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dankreiger/with-http-reducer.git"
+  },
+  "license": "ISC",
+  "author": "Dan Kreiger <dan@dankreiger.com> (http://www.dankreiger.com/)",
+  "files": [
+    "lib/**/*"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "demo": "tar tvf $(npm pack)",
+    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+    "lint": "tslint -p tsconfig.json",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test && npm run lint",
+    "sort": "sort-package-json",
+    "test": "jest --config jestconfig.json",
+    "preversion": "npm run lint",
+    "version": "npm run format && git add -A src",
+    "postversion": "git push && git push --tags"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{js,tsx,jsx,json,css}": [
+      "prettier --single-quote --write",
+      "git add"
+    ]
+  },
+  "devDependencies": {
+    "@types/jest": "24.0.18",
+    "husky": "3.0.7",
+    "jest": "24.9.0",
+    "lint-staged": "9.4.0",
+    "prettier": "1.18.2",
+    "sort-package-json": "1.22.1",
+    "ts-jest": "24.1.0",
+    "tslint": "5.20.0",
+    "tslint-config-prettier": "1.18.0",
+    "typescript": "3.6.3"
+  }
+}
