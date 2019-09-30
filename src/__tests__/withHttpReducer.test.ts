@@ -1,21 +1,22 @@
-import withHttpReducer, {
+import {
+  withHttpReducer,
   withHttpReducerInitialState
-} from "../withHttpReducer";
+} from '../withHttpReducer';
 
-import { HTTP_BEGIN, httpBegin } from "../actionTypeFormatters";
-import users, { usersInitialState } from "../utils/user.reducer";
-import { IAnyAction } from "../interfaces";
+import { HTTP_BEGIN, httpBegin } from '../actionTypeFormatters';
+import users, { usersInitialState } from '../utils/user.reducer';
+import { IAnyAction } from '../interfaces';
 
-describe("withHttpReducer", () => {
+describe('withHttpReducer', () => {
   let initialState: any;
   let newState: any;
 
-  describe("HTTP_BEGIN", () => {
+  describe('HTTP_BEGIN', () => {
     beforeEach(() => {
       initialState = { ...withHttpReducerInitialState, ...usersInitialState };
       newState = {};
     });
-    it("sets unnamed reducer state loading to true", () => {
+    it('sets unnamed reducer state loading to true', () => {
       const action: IAnyAction = httpBegin();
       newState = withHttpReducer(users)(initialState, action);
 
@@ -26,9 +27,9 @@ describe("withHttpReducer", () => {
       });
     });
 
-    it("sets named reducer state loading to true", () => {
-      const action: IAnyAction = httpBegin("users");
-      newState = withHttpReducer(users, "users")(initialState, action);
+    it('sets named reducer state loading to true', () => {
+      const action: IAnyAction = httpBegin('users');
+      newState = withHttpReducer(users, 'users')(initialState, action);
 
       expect(newState).toEqual({
         ...initialState,
@@ -37,7 +38,7 @@ describe("withHttpReducer", () => {
       });
     });
 
-    it("sets loading to true", () => {
+    it('sets loading to true', () => {
       newState = withHttpReducer(users)(usersInitialState, {
         type: HTTP_BEGIN()
       });
