@@ -54,11 +54,11 @@ $ npm install with-http-reducer
    ```js
    // components
    import React, { useEffect } from 'react';
-   import { usersHttpBegin } from './users.constants';
+   import { usersHttpBegin, usersReducerName } from './users.constants';
 
    export default () => {
      const dispatch = useDispatch();
-     const loading = useSelector(({ loading }) => loading);
+     const loading = useSelector(state => state[usersReducerName].loading);
      useEffect(() => {
        dispatch(usersHttpBegin());
      }, [fetchUsersBegin, dispatch]);
