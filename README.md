@@ -38,6 +38,7 @@ $ npm install with-http-reducer
 
    const users = (state = { current: null }, { type, payload }) => {
      switch (type) {
+       // any other case statements
        case 'SET_CURRENT_USER':
          return { ...state, current: payload };
        default:
@@ -78,7 +79,8 @@ $ npm install with-http-reducer
    import {
      usersHttpBegin,
      usersHttpSuccess,
-     usersHttpFailure
+     usersHttpFailure,
+     usersReducerName
    } from './users.constants';
    import { usersSchema } from './users.schema';
    import { of } from 'rxjs';
@@ -90,7 +92,10 @@ $ npm install with-http-reducer
          return ajax.getJSON(`someendpoint/users`).pipe(
            map(users => normalize(users, usersSchema)),
            map(({ entities, result }) =>
-             usersHttpSuccess({ byId: entities.users, allIds: result })
+             usersHttpSuccess({
+               byId: entities[usersReducerName],
+               allIds: result
+             })
            ),
            catchError(err => of(usersHttpFailure({ err })))
          );
@@ -106,7 +111,8 @@ $ npm install with-http-reducer
    import {
      usersHttpBegin,
      usersHttpSuccess,
-     usersHttpFailure
+     usersHttpFailure,
+     usersReducerName
    } from './users.constants';
    function* handleFetchTodosBeginAsync() {
      try {
@@ -114,7 +120,7 @@ $ npm install with-http-reducer
        const usersDictionary = yield normalize(users, usersSchema);
        yield put(
          usersHttpSuccess({
-           byId: usersDictionary.entities.users,
+           byId: usersDictionary.entities[usersReducerName],
            allIds: usersDictionary.result
          })
        );
