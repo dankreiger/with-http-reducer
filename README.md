@@ -30,7 +30,7 @@ $ npm install with-http-reducer
    export default withHttpReducer(users, 'users');
    ```
 
-2. Import actions as needed
+2. Import actions as needed (supply optional payload - TODO in docs)
 
    ```js
     import from 'with-http-reducer';
@@ -43,7 +43,7 @@ $ npm install with-http-reducer
       const dispatch = useDispatch();
       const loading = useSelector(({loading}) => loading);
       useEffect(() => {
-        dispatch(whr.HTTP_BEGIN('users'));
+        dispatch(whr.httpBegin('users'));
       }, [fetchUsersBegin, dispatch]);
 
       if(loading) {
