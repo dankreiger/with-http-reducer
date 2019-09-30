@@ -1,8 +1,5 @@
 import { HTTP_BEGIN, HTTP_FAILURE, HTTP_SUCCESS } from './actionTypeFormatters';
-import withHttpReducer from './withHttpReducer';
-
-export * from './withHttpReducer';
-export * from './actionTypeFormatters';
+import htr from './withHttpReducer';
 
 export const httpAction = (reducerName?: string) => ({
   BEGIN: HTTP_BEGIN(reducerName),
@@ -10,4 +7,4 @@ export const httpAction = (reducerName?: string) => ({
   SUCCESS: HTTP_SUCCESS(reducerName)
 });
 
-export default { httpAction, withHttpReducer };
+export const withHttpReducer = htr;
