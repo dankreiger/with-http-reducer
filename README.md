@@ -74,7 +74,6 @@ $ npm install with-http-reducer
    import React, { useEffect } from 'react';
    import {
      usersHttpBegin,
-     usersReducerName,
      selectUsersLoading
    } from './users.constants';
    import { useSelector, useDispatch } from 'react-redux';
