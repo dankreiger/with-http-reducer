@@ -85,7 +85,7 @@ $ npm install with-http-reducer
      const httpError = useSelector(selectUsersHttpError);
      useEffect(() => {
        dispatch(usersHttpBegin());
-     }, [fetchUsersBegin, dispatch]);
+     }, [dispatch]);
 
      if (httpError) {
        // show error boundary
