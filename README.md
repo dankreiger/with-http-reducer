@@ -38,7 +38,6 @@ $ npm install with-http-reducer
      whr.httpFailure(usersReducerName, payload);
    export const usersHttpSuccess = payload =>
      whr.httpSuccess(usersReducerName, payload);
-
    ```
 
 2. Add in higher order reducer:
@@ -64,10 +63,7 @@ $ npm install with-http-reducer
    ```js
    // components
    import React, { useEffect } from 'react';
-   import {
-     usersHttpBegin,
-     selectUsersLoading
-   } from './users.constants';
+   import { usersHttpBegin, selectUsersLoading } from './users.constants';
    import { useSelector, useDispatch } from 'react-redux';
 
    export default () => {
@@ -87,6 +83,35 @@ $ npm install with-http-reducer
      }
      return <div>content</div>;
    };
+   ```
+
+   ```js
+   // thunks
+   import { normalize } from 'normalizr';
+   import {
+     usersHttpBegin,
+     usersHttpSuccess,
+     usersHttpFailure,
+     usersReducerName
+   } from './users.constants';
+
+   function fetchUsers() {
+     return async dispatch => {
+       try {
+         const res = await fetch(`someendpoint/users/${payload}`);
+         const users = await res.json();
+         const usersDictionary = normalize(users, usersSchema);
+         dispatch(
+           usersHttpSuccess({
+             byId: usersDictionary.entities[usersReducerName],
+             allIds: usersDictionary.result
+           })
+         );
+       } catch (err) {
+         dispatch(usersHttpFailure({ err }));
+       }
+     };
+   }
    ```
 
    ```js

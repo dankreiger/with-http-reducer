@@ -11,6 +11,10 @@ export interface IWithHttpReducerInitialState {
   httpError: any;
 }
 
+export interface IWithHttpReducerRequestState extends IWithHttpReducerInitialState {
+  [extraProps: string]: any;
+}
+
 export interface IWithHttpReducerActionTypes {
   BEGIN: string;
   SUCCESS: string;

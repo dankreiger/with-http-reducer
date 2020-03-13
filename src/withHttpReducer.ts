@@ -9,13 +9,14 @@ export const withHttpReducerInitialState: IWithHttpReducerInitialState = {
 };
 
 const returnState = (combinedState: any, payload?: any) => {
-  // for default payload objects
+  // for objects that send in their own 'payload' object (usually 3rd party libraries like redux-saga)
   if (payload && Object.keys(payload)[0] === 'payload') {
     const realPayload = payload.payload;
     if (realPayload && Object.keys(realPayload).length) {
       return { ...combinedState, ...realPayload };
     }
   }
+
   if (payload) {
     return { ...combinedState, ...payload };
   }

@@ -1,11 +1,12 @@
 import { httpBegin, httpFailure, httpSuccess } from './actionTypeFormatters';
-import { withHttpReducer } from './withHttpReducer';
+import { withHttpReducer, withHttpReducerInitialState } from './withHttpReducer';
 
 const reduxAsync = {
   httpBegin,
   httpFailure,
   httpSuccess,
-  withHttpReducer
+  withHttpReducer,
+  withHttpReducerInitialState
 };
 
 export default reduxAsync;
