@@ -26,7 +26,6 @@ $ npm install with-http-reducer
    ```js
    // users.constants.js
    import whr from 'with-http-reducer';
-   import { createSelector } from 'reselect';
 
    export const usersReducerName = 'users';
 
@@ -40,13 +39,6 @@ $ npm install with-http-reducer
    export const usersHttpSuccess = payload =>
      whr.httpSuccess(usersReducerName, payload);
 
-   // `loading` and `httpError` are added to the state by the http higher order reducer
-   export const selectUsersLoading = createSelector(
-     state => state[usersReducerName].loading
-   );
-   export const selectUsersHttpError = createSelector(
-     state => state[usersReducerName].httpError
-   );
    ```
 
 2. Add in higher order reducer:
