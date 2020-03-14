@@ -18,11 +18,11 @@
   },
   "license": "ISC",
   "author": "Dan Kreiger <dan@dankreiger.com> (http://www.dankreiger.com/)",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "files": [
     "lib/**/*"
   ],
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
   "scripts": {
     "build": "tsc",
     "demo": "tar tvf $(npm pack)",
