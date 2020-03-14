@@ -5,4 +5,4 @@ export type Reducer<S = any, A extends IAction = IAnyAction> = (
   action: A
 ) => S;
 
-export type ReducerName = string | undefined;
+export type ReducerName = string;

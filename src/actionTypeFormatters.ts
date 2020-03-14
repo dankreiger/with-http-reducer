@@ -1,11 +1,14 @@
 import { IWithHttpReducerActionTypes } from './interfaces';
 import { ReducerName } from './types';
+const actionTypeCache: { [key: string]: string } = {}
 function formatActionType(reducerName: ReducerName): string {
+  if (actionTypeCache[reducerName]) return actionTypeCache[reducerName];
   const reducerNameFormatted =
     (reducerName && reducerName.replace(/([A-Z])/g, '_$1').toUpperCase()) || '';
   // TODO - don't allow a reducer name with no length
   return reducerNameFormatted.length ? `_${reducerNameFormatted}_` : '_';
 }
+
 
 export const HTTP_BEGIN = (reducerName: ReducerName) =>
   `@@http/FETCH${formatActionType(reducerName)}BEGIN`;
