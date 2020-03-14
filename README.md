@@ -97,6 +97,7 @@ $ npm install with-http-reducer
 
    function fetchUsers() {
      return async dispatch => {
+       dispatch(usersHttpBegin());
        try {
          const res = await fetch(`someendpoint/users/${payload}`);
          const users = await res.json();
