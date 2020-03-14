@@ -1,30 +1,21 @@
 import { withHttpActionType } from './actionTypeFormatters';
 
-import { IAnyAction, IWithHttpReducerInitialState } from './interfaces';
-import { Reducer } from './types';
+import { IAnyAction, IWithHttpReducerInitialState, IWithHttpReducerRequestState } from './interfaces';
 
 export const withHttpReducerInitialState: IWithHttpReducerInitialState = {
   httpError: null,
   loading: false
 };
 
-const returnState = (combinedState: any, payload?: any) => {
-  // for objects that send in their own 'payload' object (usually 3rd party libraries like redux-saga)
-  if (payload && Object.keys(payload)[0] === 'payload') {
-    const realPayload = payload.payload;
-    if (realPayload && Object.keys(realPayload).length) {
-      return { ...combinedState, ...realPayload };
-    }
-  }
-
+const returnState = (combinedState: IWithHttpReducerRequestState, payload?: object) => {
   if (payload) {
     return { ...combinedState, ...payload };
   }
   return combinedState;
 };
 
-export function withHttpReducer(reducer: Reducer, reducerName: string) {
-  return (state: any, action: IAnyAction) => {
+export function withHttpReducer(reducer: <S extends IWithHttpReducerRequestState, A extends IAnyAction>(state: S, action: A) => S, reducerName: string) {
+  return (state: IWithHttpReducerRequestState, action: IAnyAction) => {
     const combinedState = {
       ...withHttpReducerInitialState,
       ...reducer(state, action)
