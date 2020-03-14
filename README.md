@@ -99,7 +99,7 @@ $ npm install with-http-reducer
      return async dispatch => {
        dispatch(usersHttpBegin());
        try {
-         const res = await fetch(`someendpoint/users/${payload}`);
+         const res = await fetch(`someendpoint/users`);
          const users = await res.json();
          const usersDictionary = normalize(users, usersSchema);
          dispatch(
@@ -163,7 +163,7 @@ $ npm install with-http-reducer
 
    function* handleFetchUsersBeginAsync() {
      try {
-       const users = yield call(api, `someendpoint/users/${payload}`);
+       const users = yield call(api, `someendpoint/users`);
        const usersDictionary = yield normalize(users, usersSchema);
        yield put(
          usersHttpSuccess({
