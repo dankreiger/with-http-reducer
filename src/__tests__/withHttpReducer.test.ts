@@ -46,7 +46,7 @@ describe('withHttpReducer', () => {
     beforeEach(() => {
       initialState = { ...withHttpReducerInitialState, ...dummyInitialState };
       newState = {};
-      expect(BEGIN).toBe('@@http/FETCH_DUMMY_REDUCER_BEGIN');
+      expect(BEGIN).toBe('@@http/begin/dummyReducer');
     });
 
     it('sets loading to true', () => {
@@ -141,7 +141,7 @@ describe('SUCCESS actions', () => {
   let newState: IWithHttpReducerRequestState;
   beforeEach(() => {
     initialState = { ...withHttpReducerInitialState, ...dummyInitialState };
-    expect(SUCCESS).toBe('@@http/FETCH_DUMMY_REDUCER_SUCCESS');
+    expect(SUCCESS).toBe('@@http/success/dummyReducer');
   });
 
   it('sets loading to false', () => {
@@ -192,7 +192,7 @@ describe('FAILURE actions', () => {
   let newState: IWithHttpReducerRequestState
   beforeEach(() => {
     initialState = { ...withHttpReducerInitialState, ...dummyInitialState };
-    expect(FAILURE).toBe('@@http/FETCH_DUMMY_REDUCER_FAILURE');
+    expect(FAILURE).toBe('@@http/failure/dummyReducer');
   });
 
   it('sets httpError to true', () => {

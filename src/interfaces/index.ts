@@ -1,5 +1,5 @@
-export interface IAction<T = any> {
-  type: T;
+export interface IAction<T = string> {
+  readonly type: T;
 }
 
 export interface IAnyAction extends IAction {

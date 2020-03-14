@@ -6,30 +6,30 @@ import {
 } from '../actionTypeFormatters';
 
 describe('HTTP_BEGIN', () => {
-  expect(HTTP_BEGIN('users')).toBe('@@http/FETCH_USERS_BEGIN');
+  expect(HTTP_BEGIN('users')).toBe('@@http/begin/users');
 });
 
 describe('HTTP_SUCCESS', () => {
-  expect(HTTP_SUCCESS('users')).toBe('@@http/FETCH_USERS_SUCCESS');
+  expect(HTTP_SUCCESS('users')).toBe('@@http/success/users');
 });
 
 describe('HTTP_FAILURE', () => {
-  expect(HTTP_FAILURE('users')).toBe('@@http/FETCH_USERS_FAILURE');
+  expect(HTTP_FAILURE('users')).toBe('@@http/failure/users');
 });
 
 describe('withHttpActionType', () => {
   it('formats a single word', () => {
     expect(withHttpActionType('users')).toEqual({
-      BEGIN: '@@http/FETCH_USERS_BEGIN',
-      FAILURE: '@@http/FETCH_USERS_FAILURE',
-      SUCCESS: '@@http/FETCH_USERS_SUCCESS'
+      BEGIN: '@@http/begin/users',
+      FAILURE: '@@http/failure/users',
+      SUCCESS: '@@http/success/users'
     });
   });
   it('formats camel case to capitalize', () => {
     expect(withHttpActionType('dogPosts')).toEqual({
-      BEGIN: '@@http/FETCH_DOG_POSTS_BEGIN',
-      FAILURE: '@@http/FETCH_DOG_POSTS_FAILURE',
-      SUCCESS: '@@http/FETCH_DOG_POSTS_SUCCESS'
+      BEGIN: '@@http/begin/dogPosts',
+      FAILURE: '@@http/failure/dogPosts',
+      SUCCESS: '@@http/success/dogPosts'
     });
   });
 });

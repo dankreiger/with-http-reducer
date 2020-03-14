@@ -1,22 +1,14 @@
 import { IWithHttpReducerActionTypes } from './interfaces';
 import { ReducerName } from './types';
-const actionTypeCache: { [key: string]: string } = {}
-function formatActionType(reducerName: ReducerName): string {
-  if (actionTypeCache[reducerName]) return actionTypeCache[reducerName];
-  const reducerNameFormatted =
-    (reducerName && reducerName.replace(/([A-Z])/g, '_$1').toUpperCase()) || '';
-  // TODO - don't allow a reducer name with no length
-  return reducerNameFormatted.length ? `_${reducerNameFormatted}_` : '_';
-}
+import { EWithHttpReducerActionPrefixes } from './enums';
 
 
 export const HTTP_BEGIN = (reducerName: ReducerName) =>
-  `@@http/FETCH${formatActionType(reducerName)}BEGIN`;
-
+  `${EWithHttpReducerActionPrefixes.BEGIN}${reducerName}`;
 export const HTTP_SUCCESS = (reducerName: ReducerName) =>
-  `@@http/FETCH${formatActionType(reducerName)}SUCCESS`;
+  `${EWithHttpReducerActionPrefixes.SUCCESS}${reducerName}`;
 export const HTTP_FAILURE = (reducerName: ReducerName) =>
-  `@@http/FETCH${formatActionType(reducerName)}FAILURE`;
+  `${EWithHttpReducerActionPrefixes.FAILURE}${reducerName}`;
 
 export function withHttpActionType(
   reducerName: ReducerName
