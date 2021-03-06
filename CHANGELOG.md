@@ -1,3 +1,10 @@
+## [1.1.18](https://github.com/dankreiger/with-http-reducer/compare/v1.1.17...v1.1.18) (2021-03-06)
+
+
+### Bug Fixes
+
+* **husky:** disable husky completely in ci ([e3e95a8](https://github.com/dankreiger/with-http-reducer/commit/e3e95a895fef8d58b37340f57530d227d49b31a2))
+
 ## [1.1.17](https://github.com/dankreiger/with-http-reducer/compare/v1.1.16...v1.1.17) (2021-03-06)
 
 
