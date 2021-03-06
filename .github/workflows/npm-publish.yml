@@ -1,45 +1,58 @@
 name: Publish to NPM Registry
 on:
   push:
-    branches: [ master ]   
+    branches: [master]
 jobs:
   publish:
     name: 'On Master Push - Release version to NPM Registry'
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout project
-      uses: actions/checkout@v2  
+      - name: Checkout project
+        uses: actions/checkout@v2
 
-    - name: Setup configuration for NPM registry
-      uses: actions/setup-node@v2
-      with:
-        node-version: '14.x'
-        registry-url: 'https://registry.npmjs.org'
-        scope: '@dankreiger'
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
 
-    - name: Install dependencies
-      run: yarn
+      - name: Restoring yarn cache
+        uses: actions/cache@v2
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
 
-    - name: Run tests
-      run: yarn test
+      - name: Setup configuration for NPM registry
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14.x'
+          registry-url: 'https://registry.npmjs.org'
+          scope: '@dankreiger'
 
-    - name: Build new bundle for package
-      run: yarn build
+      - name: Install dependencies
+        run: yarn
 
-    - name: Run lint
-      run: yarn lint      
+      - name: Run tests
+        run: yarn test
 
-    - name: Create release and publish scoped package
-      run: yarn semantic-release
-      env:
-        GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}      
+      - name: Build new bundle for package
+        run: yarn build
 
-    - name: Publish unscoped package
-      run: |
-        sed -ie 's/@dankreiger\///g' package.json
-        npm publish
-        mv package.jsone package.json
-      env:
-        GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Run lint
+        run: yarn lint
+
+      - name: Create release and publish scoped package
+        run: yarn semantic-release
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish unscoped package
+        run: |
+          sed -ie 's/@dankreiger\///g' package.json
+          npm publish
+          mv package.jsone package.json
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
