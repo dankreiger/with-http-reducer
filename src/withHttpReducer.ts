@@ -1,47 +1,63 @@
 import { withHttpActionType } from './actionTypeFormatters';
 
-import { IAnyAction, IWithHttpReducerInitialState, IWithHttpReducerRequestState } from './interfaces';
+import { IReducer, IWithHttpReducerInitialState } from './interfaces';
+import { AnyAction, WithHttpReducerState } from './types';
 
 export const withHttpReducerInitialState: IWithHttpReducerInitialState = {
   httpError: null,
-  loading: false
+  loading: false,
 };
 
-const returnState = (combinedState: IWithHttpReducerRequestState, payload?: object) => {
-  if (payload) {
+const returnState = <S, P = unknown, E = unknown>(
+  combinedState: WithHttpReducerState<S, E>,
+  payload?: P
+) => {
+  if (payload && typeof payload === 'object') {
     return { ...combinedState, ...payload };
   }
   return combinedState;
 };
 
-export function withHttpReducer(reducer: <S extends IWithHttpReducerRequestState, A extends IAnyAction>(state: S, action: A) => S, reducerName: string) {
-  return (state: IWithHttpReducerRequestState, action: IAnyAction) => {
-    const combinedState = {
+export function withHttpReducer<S, P = unknown>(
+  reducer: IReducer<S, AnyAction<P>>,
+  reducerName: string
+) {
+  return (state: S, action: AnyAction<P>): WithHttpReducerState<S> => {
+    const reducedState = reducer(state, action);
+    const combinedState: WithHttpReducerState<S> = {
       ...withHttpReducerInitialState,
-      ...reducer(state, action)
+      // improve readability here
+      ...reducedState,
     };
+
     const { BEGIN, SUCCESS, FAILURE } = withHttpActionType(reducerName);
-    const { type, payload } = action;
+    const { type, ...rest } = action;
+
+    const newState: WithHttpReducerState<S> = returnState<
+      S,
+      Pick<AnyAction<P>, Exclude<keyof P, 'type'>>
+    >(combinedState, rest);
+
     switch (type) {
       case BEGIN:
         return {
-          ...returnState(combinedState, payload),
+          ...newState,
           httpError: null,
-          loading: true
+          loading: true,
         };
       case SUCCESS:
         return {
-          ...returnState(combinedState, payload),
-          loading: false
+          ...newState,
+          loading: false,
         };
       case FAILURE:
         return {
-          ...returnState(combinedState, payload),
+          ...newState,
           httpError: true,
-          loading: false
+          loading: false,
         };
       default:
-        return reducer(combinedState, action);
+        return newState;
     }
   };
 }

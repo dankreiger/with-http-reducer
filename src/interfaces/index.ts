@@ -1,18 +1,16 @@
-export interface IAction<T = string> {
-  readonly type: T;
+import { AnyAction } from '../types';
+
+export interface IAction {
+  readonly type: string;
 }
 
-export interface IAnyAction extends IAction {
-  [extraProps: string]: any;
+export interface IReducer<S, A extends AnyAction<unknown>> {
+  (state: S, action: A): S;
 }
 
-export interface IWithHttpReducerInitialState {
+export interface IWithHttpReducerInitialState<E = unknown> {
   loading: boolean;
-  httpError: any;
-}
-
-export interface IWithHttpReducerRequestState extends IWithHttpReducerInitialState {
-  [extraProps: string]: any;
+  httpError: E;
 }
 
 export interface IWithHttpReducerActionTypes {

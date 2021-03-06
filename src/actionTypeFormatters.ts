@@ -1,12 +1,12 @@
 import { IWithHttpReducerActionTypes } from './interfaces';
 import { EWithHttpReducerActionPrefixes as Prefix } from './enums';
+import { ActionTypeFormatter } from './types';
 
-
-export const HTTP_BEGIN = (reducerName: string) =>
+export const HTTP_BEGIN = (reducerName: string): string =>
   `${Prefix.BEGIN}${reducerName}`;
-export const HTTP_SUCCESS = (reducerName: string) =>
+export const HTTP_SUCCESS = (reducerName: string): string =>
   `${Prefix.SUCCESS}${reducerName}`;
-export const HTTP_FAILURE = (reducerName: string) =>
+export const HTTP_FAILURE = (reducerName: string): string =>
   `${Prefix.FAILURE}${reducerName}`;
 
 export function withHttpActionType(
@@ -15,28 +15,36 @@ export function withHttpActionType(
   return {
     BEGIN: HTTP_BEGIN(reducerName),
     FAILURE: HTTP_FAILURE(reducerName),
-    SUCCESS: HTTP_SUCCESS(reducerName)
+    SUCCESS: HTTP_SUCCESS(reducerName),
   };
 }
 
-const actionReturn = (type: string, payload?: object) => {
-  if (payload) {
-    return { type, payload };
+const actionReturn = <P>(type: string, payload: P) => {
+  if (!!payload && typeof payload === 'object') {
+    return { type, ...payload };
   }
   return { type };
 };
-
-export const httpBegin = (reducerName: string, payload?: object) => {
+export const httpBegin: ActionTypeFormatter = (
+  reducerName,
+  payload = undefined
+) => {
   const type = HTTP_BEGIN(reducerName);
   return actionReturn(type, payload);
 };
 
-export const httpSuccess = (reducerName: string, payload?: object) => {
+export const httpSuccess: ActionTypeFormatter = (
+  reducerName,
+  payload = undefined
+) => {
   const type = HTTP_SUCCESS(reducerName);
-  return actionReturn(type, payload);
+  return { type, ...payload };
 };
 
-export const httpFailure = (reducerName: string, payload?: object) => {
+export const httpFailure: ActionTypeFormatter = (
+  reducerName,
+  payload = undefined
+) => {
   const type = HTTP_FAILURE(reducerName);
   return actionReturn(type, payload);
 };

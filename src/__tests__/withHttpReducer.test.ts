@@ -1,20 +1,42 @@
 import { withHttpActionType } from '../actionTypeFormatters';
-import { IAnyAction, IWithHttpReducerInitialState, IWithHttpReducerRequestState } from '../interfaces';
-import { deepFreeze } from '../utils/deepFreeze';
-import { withHttpReducer, withHttpReducerInitialState } from '../withHttpReducer';
+import { IReducer } from '../interfaces';
+import { WithHttpReducerState } from '../types';
+import deepFreeze from 'deep-freeze';
+import {
+  withHttpReducer,
+  withHttpReducerInitialState,
+} from '../withHttpReducer';
+import { AnyAction } from '../types';
+
+interface IDummyState {
+  currentUser: string | undefined;
+  numberOfDogs: number;
+  userIsActive: boolean;
+}
 
 const dummyInitialState = {
-  currentUser: 'woof',
+  currentUser: undefined,
   numberOfDogs: 1,
   userIsActive: false,
 };
 
-const dummyReducer = (state: any = dummyInitialState, action: IAnyAction) => {
+type DummyStateWithHttpReducerState = WithHttpReducerState<
+  IDummyState,
+  unknown
+>;
+interface IDummyPayload {
+  user?: string | undefined;
+}
+
+const dummyReducer: IReducer<IDummyState, AnyAction<IDummyPayload>> = (
+  state = dummyInitialState,
+  action
+) => {
   switch (action.type) {
     case 'UPDATE_CURRENT_USER':
       return {
         ...state,
-        currentUser: action.user
+        currentUser: action.user,
       };
     default:
       return state;
@@ -31,8 +53,8 @@ const dummyReducer = (state: any = dummyInitialState, action: IAnyAction) => {
  */
 
 describe('withHttpReducer', () => {
-  let initialState: any;
-  let newState;
+  let initialState: DummyStateWithHttpReducerState;
+  let newState = {};
 
   /**
    * @description BEGIN
@@ -61,14 +83,14 @@ describe('withHttpReducer', () => {
       );
       expect(newState).toEqual({
         ...initialState,
-        loading: true
+        loading: true,
       });
     });
 
     it('does not change a LOADING state to account for requests that begin again while in a loading state', () => {
       initialState = {
         ...initialState,
-        loading: true
+        loading: true,
       };
       const dummyBeginActionCreator = () => ({ type: BEGIN });
 
@@ -81,15 +103,14 @@ describe('withHttpReducer', () => {
       );
       expect(newState).toEqual({
         ...initialState,
-        loading: true
+        loading: true,
       });
     });
-
 
     it('sets a FAILURE state back to null', () => {
       initialState = {
         ...initialState,
-        httpError: new Error('woof')
+        httpError: new Error('woof'),
       };
       const dummyBeginActionCreator = () => ({ type: BEGIN });
 
@@ -107,9 +128,9 @@ describe('withHttpReducer', () => {
       });
     });
 
-    it('accepts a payload as an object in the action creator', () => {
-      const dummyBeginActionCreator = (payload: object) => ({
-        payload,
+    it('accepts a payload as an object in the action creator and merges it into the returned state', () => {
+      const dummyBeginActionCreator = (payload: { animal: string }) => ({
+        ...payload,
         type: BEGIN,
       });
 
@@ -127,8 +148,6 @@ describe('withHttpReducer', () => {
       });
     });
   });
-
-
 });
 
 /**
@@ -137,8 +156,8 @@ describe('withHttpReducer', () => {
  */
 describe('SUCCESS actions', () => {
   const { SUCCESS } = withHttpActionType('dummyReducer');
-  let initialState: IWithHttpReducerInitialState;
-  let newState: IWithHttpReducerRequestState;
+  let initialState: DummyStateWithHttpReducerState;
+  let newState: DummyStateWithHttpReducerState;
   beforeEach(() => {
     initialState = { ...withHttpReducerInitialState, ...dummyInitialState };
     expect(SUCCESS).toBe('@@http/success/dummyReducer');
@@ -146,7 +165,7 @@ describe('SUCCESS actions', () => {
 
   it('sets loading to false', () => {
     const dummySuccessActionCreator = () => ({ type: SUCCESS });
-    initialState = { ...withHttpReducerInitialState, loading: true }
+    initialState = { ...initialState, loading: true };
     deepFreeze(dummySuccessActionCreator);
     deepFreeze(initialState);
 
@@ -160,9 +179,9 @@ describe('SUCCESS actions', () => {
     });
   });
 
-  it('accepts a payload as an object in the action creator', () => {
-    const dummySuccessActionCreator = (payload: object) => ({
-      payload,
+  it('accepts a payload as an object in the action creator and merges it into the returned state', () => {
+    const dummySuccessActionCreator = (payload: { animal: string }) => ({
+      ...payload,
       type: SUCCESS,
     });
 
@@ -175,7 +194,7 @@ describe('SUCCESS actions', () => {
     );
     expect(newState).toEqual({
       ...initialState,
-      animal: 'dog'
+      animal: 'dog',
     });
   });
 });
@@ -188,8 +207,8 @@ describe('SUCCESS actions', () => {
  */
 describe('FAILURE actions', () => {
   const { FAILURE } = withHttpActionType('dummyReducer');
-  let initialState: IWithHttpReducerInitialState;
-  let newState: IWithHttpReducerRequestState
+  let initialState: DummyStateWithHttpReducerState;
+  let newState: DummyStateWithHttpReducerState;
   beforeEach(() => {
     initialState = { ...withHttpReducerInitialState, ...dummyInitialState };
     expect(FAILURE).toBe('@@http/failure/dummyReducer');
@@ -211,9 +230,9 @@ describe('FAILURE actions', () => {
     });
   });
 
-  it('accepts a payload as an object in the action creator', () => {
-    const dummyFailureActionCreator = (payload: object) => ({
-      payload,
+  it('accepts a payload as an object in the action creator and merges it into the returned state', () => {
+    const dummyFailureActionCreator = (payload: { animal: string }) => ({
+      ...payload,
       type: FAILURE,
     });
 
@@ -231,4 +250,3 @@ describe('FAILURE actions', () => {
     });
   });
 });
-
