@@ -1,41 +1,42 @@
-import { withHttpActionType } from './actionTypeFormatters';
-
 import { IReducer, IWithHttpReducerInitialState } from './interfaces';
-import { AnyAction, WithHttpReducerState } from './types';
+import { TAnyAction, IWithHttpReducerState, TInnerReducer } from './types';
+import { withHttpActionType } from './utils/actionTypeFormatters';
+import returnState from './utils/returnState';
 
 export const withHttpReducerInitialState: IWithHttpReducerInitialState = {
   httpError: null,
   loading: false,
 };
 
-const returnState = <S, P = unknown, E = unknown>(
-  combinedState: WithHttpReducerState<S, E>,
-  payload?: P
-) => {
-  if (payload && typeof payload === 'object') {
-    return { ...combinedState, ...payload };
-  }
-  return combinedState;
-};
-
 export function withHttpReducer<S, P = unknown>(
-  reducer: IReducer<S, AnyAction<P>>,
-  reducerName: string
-) {
-  return (state: S, action: AnyAction<P>): WithHttpReducerState<S> => {
-    const reducedState = reducer(state, action);
-    const combinedState: WithHttpReducerState<S> = {
+  reducer: IReducer<S, TAnyAction<P>>
+): TInnerReducer<S, P> {
+  if (typeof reducer !== 'function') {
+    throw new Error(
+      'Argument passed to withHttpReducer must be a reducer function'
+    );
+  }
+
+  const { BEGIN, SUCCESS, FAILURE } = withHttpActionType(reducer.name);
+
+  function combineStateReducer(
+    state: S,
+    action: TAnyAction<P>
+  ): IWithHttpReducerState<S> {
+    if (typeof action?.type !== 'string') {
+      throw new Error(`Actions must have a 'type' property of type string`);
+    }
+
+    const combinedState: IWithHttpReducerState<S> = {
       ...withHttpReducerInitialState,
-      // improve readability here
-      ...reducedState,
+      ...reducer(state, action),
     };
 
-    const { BEGIN, SUCCESS, FAILURE } = withHttpActionType(reducerName);
     const { type, ...rest } = action;
 
-    const newState: WithHttpReducerState<S> = returnState<
+    const newState: IWithHttpReducerState<S> = returnState<
       S,
-      Pick<AnyAction<P>, Exclude<keyof P, 'type'>>
+      Pick<TAnyAction<P>, Exclude<keyof P, 'type'>>
     >(combinedState, rest);
 
     switch (type) {
@@ -59,5 +60,7 @@ export function withHttpReducer<S, P = unknown>(
       default:
         return newState;
     }
-  };
+  }
+
+  return Object.assign(combineStateReducer, { BEGIN, SUCCESS, FAILURE });
 }

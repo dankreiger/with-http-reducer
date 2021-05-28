@@ -1,10 +1,10 @@
-import { AnyAction } from '../types';
+import { TAnyAction } from '../types';
 
 export interface IAction {
   readonly type: string;
 }
 
-export interface IReducer<S, A extends AnyAction<unknown>> {
+export interface IReducer<S, A extends TAnyAction<unknown>> {
   (state: S, action: A): S;
 }
 

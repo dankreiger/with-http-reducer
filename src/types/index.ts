@@ -1,14 +1,18 @@
-import { IAction, IWithHttpReducerInitialState } from '../interfaces';
+import {
+  IAction,
+  IWithHttpReducerActionTypes,
+  IWithHttpReducerInitialState,
+} from '../interfaces';
 
-export type WithHttpReducerState<
+export type IWithHttpReducerState<
   T,
   E = unknown
 > = IWithHttpReducerInitialState<E> & T;
 
-export type AnyAction<R> = IAction & R;
+export type TAnyAction<R> = IAction & R;
 
-// TODO: make this type clearer
-export type ActionTypeFormatter = (
-  reducerName: string,
-  payload?: Record<string, unknown> | undefined
-) => AnyAction<Record<string, unknown>> | IAction;
+export type TInnerReducer<S, P = unknown> = ((
+  state: S,
+  action: TAnyAction<P>
+) => IWithHttpReducerState<S>) &
+  IWithHttpReducerActionTypes;

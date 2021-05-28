@@ -1,12 +1,12 @@
-import { withHttpActionType } from '../actionTypeFormatters';
+import { withHttpActionType } from '../utils/actionTypeFormatters';
 import { IReducer } from '../interfaces';
-import { WithHttpReducerState } from '../types';
+import { IWithHttpReducerState } from '../types';
 import deepFreeze from 'deep-freeze';
 import {
   withHttpReducer,
   withHttpReducerInitialState,
 } from '../withHttpReducer';
-import { AnyAction } from '../types';
+import { TAnyAction } from '../types';
 
 interface IDummyState {
   currentUser: string | undefined;
@@ -20,7 +20,7 @@ const dummyInitialState = {
   userIsActive: false,
 };
 
-type DummyStateWithHttpReducerState = WithHttpReducerState<
+type DummyStateIWithHttpReducerState = IWithHttpReducerState<
   IDummyState,
   unknown
 >;
@@ -28,7 +28,7 @@ interface IDummyPayload {
   user?: string | undefined;
 }
 
-const dummyReducer: IReducer<IDummyState, AnyAction<IDummyPayload>> = (
+const dummyReducer: IReducer<IDummyState, TAnyAction<IDummyPayload>> = (
   state = dummyInitialState,
   action
 ) => {
@@ -53,7 +53,7 @@ const dummyReducer: IReducer<IDummyState, AnyAction<IDummyPayload>> = (
  */
 
 describe('withHttpReducer', () => {
-  let initialState: DummyStateWithHttpReducerState;
+  let initialState: DummyStateIWithHttpReducerState;
   let newState = {};
 
   /**
@@ -156,8 +156,8 @@ describe('withHttpReducer', () => {
  */
 describe('SUCCESS actions', () => {
   const { SUCCESS } = withHttpActionType('dummyReducer');
-  let initialState: DummyStateWithHttpReducerState;
-  let newState: DummyStateWithHttpReducerState;
+  let initialState: DummyStateIWithHttpReducerState;
+  let newState: DummyStateIWithHttpReducerState;
   beforeEach(() => {
     initialState = { ...withHttpReducerInitialState, ...dummyInitialState };
     expect(SUCCESS).toBe('@@http/success/dummyReducer');
@@ -207,8 +207,8 @@ describe('SUCCESS actions', () => {
  */
 describe('FAILURE actions', () => {
   const { FAILURE } = withHttpActionType('dummyReducer');
-  let initialState: DummyStateWithHttpReducerState;
-  let newState: DummyStateWithHttpReducerState;
+  let initialState: DummyStateIWithHttpReducerState;
+  let newState: DummyStateIWithHttpReducerState;
   beforeEach(() => {
     initialState = { ...withHttpReducerInitialState, ...dummyInitialState };
     expect(FAILURE).toBe('@@http/failure/dummyReducer');
