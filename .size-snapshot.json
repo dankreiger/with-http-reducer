@@ -1,0 +1,31 @@
+{
+  "index.js": {
+    "bundled": 2241,
+    "minified": 2241,
+    "gzipped": 1017
+  },
+  "index.es.js": {
+    "bundled": 2179,
+    "minified": 2179,
+    "gzipped": 985,
+    "treeshaked": {
+      "rollup": {
+        "code": 189,
+        "import_statements": 0
+      },
+      "webpack": {
+        "code": 1148
+      }
+    }
+  },
+  "whr.development.min.js": {
+    "bundled": 2546,
+    "minified": 2414,
+    "gzipped": 1078
+  },
+  "whr.production.min.js": {
+    "bundled": 2352,
+    "minified": 2352,
+    "gzipped": 1045
+  }
+}

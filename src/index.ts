@@ -1,12 +1,5 @@
-import { httpBegin, httpFailure, httpSuccess } from './actionTypeFormatters';
-import { withHttpReducer, withHttpReducerInitialState } from './withHttpReducer';
+import { WHR } from './withHttpReducer';
+import type { TInnerReducer } from './types/types';
+export type { TInnerReducer };
 
-const reduxAsync = {
-  httpBegin,
-  httpFailure,
-  httpSuccess,
-  withHttpReducer,
-  withHttpReducerInitialState
-};
-
-export default reduxAsync;
+export { WHR };

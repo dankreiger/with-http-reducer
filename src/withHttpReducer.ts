@@ -1,47 +1,38 @@
-import { withHttpActionType } from './actionTypeFormatters';
+import { TInnerReducer } from './types/types';
+import { withHttpActionType } from './utils/actionTypeFormatters';
+import { Reducer } from 'redux';
+import { simpleRequest } from './utils/simpleRequest';
+import { combineStateReducer } from './utils/combineStateReducer';
 
-import { IAnyAction, IWithHttpReducerInitialState, IWithHttpReducerRequestState } from './interfaces';
-
-export const withHttpReducerInitialState: IWithHttpReducerInitialState = {
-  httpError: null,
-  loading: false
-};
-
-const returnState = (combinedState: IWithHttpReducerRequestState, payload?: object) => {
-  if (payload) {
-    return { ...combinedState, ...payload };
+const reducerNames = new Set<string>();
+export function WHR<S, R>(
+  reducer: Reducer,
+  name?: string
+): TInnerReducer<S, R> {
+  if (typeof reducer !== 'function') {
+    throw new Error('Argument passed to WHR must be a reducer function');
   }
-  return combinedState;
-};
+  const _name = name || reducer.name;
+  if (!_name) {
+    throw new Error(
+      'Reducer does not have a name. Please name your reducer function, or pass a name to the second argument of WHR'
+    );
+  }
 
-export function withHttpReducer(reducer: <S extends IWithHttpReducerRequestState, A extends IAnyAction>(state: S, action: A) => S, reducerName: string) {
-  return (state: IWithHttpReducerRequestState, action: IAnyAction) => {
-    const combinedState = {
-      ...withHttpReducerInitialState,
-      ...reducer(state, action)
-    };
-    const { BEGIN, SUCCESS, FAILURE } = withHttpActionType(reducerName);
-    const { type, payload } = action;
-    switch (type) {
-      case BEGIN:
-        return {
-          ...returnState(combinedState, payload),
-          httpError: null,
-          loading: true
-        };
-      case SUCCESS:
-        return {
-          ...returnState(combinedState, payload),
-          loading: false
-        };
-      case FAILURE:
-        return {
-          ...returnState(combinedState, payload),
-          httpError: true,
-          loading: false
-        };
-      default:
-        return reducer(combinedState, action);
-    }
-  };
+  if (reducerNames.has(reducer.name)) {
+    throw new Error(
+      `Reducer name ${reducer.name} already exists in this project. Please give your reducer a unique name.`
+    );
+  } else {
+    reducerNames.add(reducer.name);
+  }
+
+  const actionTypes = withHttpActionType(reducer.name);
+  const innerReducer = combineStateReducer<S, R>(reducer, actionTypes);
+  const request = simpleRequest(actionTypes);
+
+  return Object.assign(innerReducer, {
+    request,
+    ...actionTypes,
+  });
 }

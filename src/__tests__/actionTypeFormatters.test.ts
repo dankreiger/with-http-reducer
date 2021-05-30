@@ -2,8 +2,8 @@ import {
   withHttpActionType,
   HTTP_BEGIN,
   HTTP_FAILURE,
-  HTTP_SUCCESS
-} from '../actionTypeFormatters';
+  HTTP_SUCCESS,
+} from '../TActionTypeFormatters';
 
 describe('HTTP_BEGIN', () => {
   expect(HTTP_BEGIN('users')).toBe('@@http/begin/users');
@@ -22,14 +22,14 @@ describe('withHttpActionType', () => {
     expect(withHttpActionType('users')).toEqual({
       BEGIN: '@@http/begin/users',
       FAILURE: '@@http/failure/users',
-      SUCCESS: '@@http/success/users'
+      SUCCESS: '@@http/success/users',
     });
   });
   it('formats camel case to capitalize', () => {
     expect(withHttpActionType('dogPosts')).toEqual({
       BEGIN: '@@http/begin/dogPosts',
       FAILURE: '@@http/failure/dogPosts',
-      SUCCESS: '@@http/success/dogPosts'
+      SUCCESS: '@@http/success/dogPosts',
     });
   });
 });
