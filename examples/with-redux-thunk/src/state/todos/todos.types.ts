@@ -5,6 +5,4 @@ export interface ITodo {
   completed: boolean;
 }
 
-export interface ITodosState {
-  todos: ITodo[];
-}
+export interface ITodosState {}

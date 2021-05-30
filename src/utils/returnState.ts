@@ -1,9 +1,9 @@
-import { IWithHttpReducerState } from '../types';
+import { IWHRState } from '../types/types';
 
-export default function returnState<S, P = unknown, E = unknown>(
-  combinedState: IWithHttpReducerState<S, E>,
-  payload?: P
-): IWithHttpReducerState<S, E> {
+export default function returnState<S, R>(
+  combinedState: IWHRState<S, R>,
+  payload?: unknown
+): IWHRState<S, R> {
   if (payload && typeof payload === 'object') {
     return { ...combinedState, ...payload };
   }

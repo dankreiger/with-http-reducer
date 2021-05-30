@@ -1,18 +1,17 @@
 import { Dispatch } from 'redux';
-import abortableFetch from 'utils/abortableFetch';
+import { todosReducer } from './todos.reducer';
 
-import todosReducer from './todos.reducer';
-import { ITodo } from './todos.types';
-
-export const fetchTodos = () => (dispatch: Dispatch) => {
-  dispatch({ type: todosReducer.BEGIN });
-
-  fetch('https://jsonplaceholder.typicode.com/todos')
-    .then((response) => response.json())
-    .then((response: ITodo[]) =>
-      dispatch({ type: todosReducer.SUCCESS, todos: response })
-    )
-    .catch((error: Error) => dispatch({ type: todosReducer.FAILURE }));
+export const fetchTodos = () => async (dispatch: Dispatch) => {
+  try {
+    dispatch({ type: todosReducer.LOADING });
+    const response = await fetch(
+      'https://jsonplaceholder.typicode.com/todos?_limit=3'
+    );
+    const json = await response.json();
+    dispatch({ type: todosReducer.SUCCESS, response: json });
+  } catch (error) {
+    dispatch({ type: todosReducer.FAILURE, httpError: error });
+  }
 };
 
 // export const complexFetchTodos = () => (dispatch: Dispatch) => {

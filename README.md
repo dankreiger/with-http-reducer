@@ -30,7 +30,7 @@ $ npm install with-http-reducer
    export const usersReducerName = 'users';
 
    export const usersWithHttp = reducer =>
-     whr.withHttpReducer(reducer, usersReducerName);
+     whr.WHR(reducer, usersReducerName);
 
    export const usersHttpBegin = payload =>
      whr.httpBegin(usersReducerName, payload);

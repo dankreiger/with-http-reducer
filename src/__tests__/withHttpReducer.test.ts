@@ -1,11 +1,8 @@
 import { withHttpActionType } from '../utils/actionTypeFormatters';
 import { IReducer } from '../interfaces';
-import { IWithHttpReducerState } from '../types';
+import { IWHRState } from '../types';
 import deepFreeze from 'deep-freeze';
-import {
-  withHttpReducer,
-  withHttpReducerInitialState,
-} from '../withHttpReducer';
+import { WHR, WHRInitialState } from '../WHR';
 import { TAnyAction } from '../types';
 
 interface IDummyState {
@@ -20,10 +17,7 @@ const dummyInitialState = {
   userIsActive: false,
 };
 
-type DummyStateIWithHttpReducerState = IWithHttpReducerState<
-  IDummyState,
-  unknown
->;
+type DummyStateIWHRState = IWHRState<IDummyState, unknown>;
 interface IDummyPayload {
   user?: string | undefined;
 }
@@ -44,7 +38,7 @@ const dummyReducer: IReducer<IDummyState, TAnyAction<IDummyPayload>> = (
 };
 
 /**
- * @description withHttpReducer
+ * @description WHR
  * a higher-order reducer that handles simple/complex data requests
  * can be used for a simple http requests by using:
  *  - BEGIN (set in progress)
@@ -52,8 +46,8 @@ const dummyReducer: IReducer<IDummyState, TAnyAction<IDummyPayload>> = (
  *  - COMPLETED (finished) - can be used to dispatch success payloads as well
  */
 
-describe('withHttpReducer', () => {
-  let initialState: DummyStateIWithHttpReducerState;
+describe('WHR', () => {
+  let initialState: DummyStateIWHRState;
   let newState = {};
 
   /**
@@ -66,7 +60,7 @@ describe('withHttpReducer', () => {
     const { BEGIN } = withHttpActionType('dummyReducer');
 
     beforeEach(() => {
-      initialState = { ...withHttpReducerInitialState, ...dummyInitialState };
+      initialState = { ...WHRInitialState, ...dummyInitialState };
       newState = {};
       expect(BEGIN).toBe('@@http/begin/dummyReducer');
     });
@@ -77,7 +71,7 @@ describe('withHttpReducer', () => {
       deepFreeze(dummyBeginActionCreator);
       deepFreeze(initialState);
 
-      newState = withHttpReducer(dummyReducer, 'dummyReducer')(
+      newState = WHR(dummyReducer, 'dummyReducer')(
         initialState,
         dummyBeginActionCreator()
       );
@@ -97,7 +91,7 @@ describe('withHttpReducer', () => {
       deepFreeze(dummyBeginActionCreator);
       deepFreeze(initialState);
 
-      newState = withHttpReducer(dummyReducer, 'dummyReducer')(
+      newState = WHR(dummyReducer, 'dummyReducer')(
         initialState,
         dummyBeginActionCreator()
       );
@@ -117,7 +111,7 @@ describe('withHttpReducer', () => {
       deepFreeze(dummyBeginActionCreator);
       deepFreeze(initialState);
 
-      newState = withHttpReducer(dummyReducer, 'dummyReducer')(
+      newState = WHR(dummyReducer, 'dummyReducer')(
         initialState,
         dummyBeginActionCreator()
       );
@@ -137,7 +131,7 @@ describe('withHttpReducer', () => {
       deepFreeze(dummyBeginActionCreator);
       deepFreeze(initialState);
 
-      newState = withHttpReducer(dummyReducer, 'dummyReducer')(
+      newState = WHR(dummyReducer, 'dummyReducer')(
         initialState,
         dummyBeginActionCreator({ animal: 'dog' })
       );
@@ -156,10 +150,10 @@ describe('withHttpReducer', () => {
  */
 describe('SUCCESS actions', () => {
   const { SUCCESS } = withHttpActionType('dummyReducer');
-  let initialState: DummyStateIWithHttpReducerState;
-  let newState: DummyStateIWithHttpReducerState;
+  let initialState: DummyStateIWHRState;
+  let newState: DummyStateIWHRState;
   beforeEach(() => {
-    initialState = { ...withHttpReducerInitialState, ...dummyInitialState };
+    initialState = { ...WHRInitialState, ...dummyInitialState };
     expect(SUCCESS).toBe('@@http/success/dummyReducer');
   });
 
@@ -169,7 +163,7 @@ describe('SUCCESS actions', () => {
     deepFreeze(dummySuccessActionCreator);
     deepFreeze(initialState);
 
-    newState = withHttpReducer(dummyReducer, 'dummyReducer')(
+    newState = WHR(dummyReducer, 'dummyReducer')(
       initialState,
       dummySuccessActionCreator()
     );
@@ -188,7 +182,7 @@ describe('SUCCESS actions', () => {
     deepFreeze(dummySuccessActionCreator);
     deepFreeze(initialState);
 
-    newState = withHttpReducer(dummyReducer, 'dummyReducer')(
+    newState = WHR(dummyReducer, 'dummyReducer')(
       initialState,
       dummySuccessActionCreator({ animal: 'dog' })
     );
@@ -207,10 +201,10 @@ describe('SUCCESS actions', () => {
  */
 describe('FAILURE actions', () => {
   const { FAILURE } = withHttpActionType('dummyReducer');
-  let initialState: DummyStateIWithHttpReducerState;
-  let newState: DummyStateIWithHttpReducerState;
+  let initialState: DummyStateIWHRState;
+  let newState: DummyStateIWHRState;
   beforeEach(() => {
-    initialState = { ...withHttpReducerInitialState, ...dummyInitialState };
+    initialState = { ...WHRInitialState, ...dummyInitialState };
     expect(FAILURE).toBe('@@http/failure/dummyReducer');
   });
 
@@ -220,7 +214,7 @@ describe('FAILURE actions', () => {
     deepFreeze(dummyFailureActionCreator);
     deepFreeze(initialState);
 
-    newState = withHttpReducer(dummyReducer, 'dummyReducer')(
+    newState = WHR(dummyReducer, 'dummyReducer')(
       initialState,
       dummyFailureActionCreator()
     );
@@ -239,7 +233,7 @@ describe('FAILURE actions', () => {
     deepFreeze(dummyFailureActionCreator);
     deepFreeze(initialState);
 
-    newState = withHttpReducer(dummyReducer, 'dummyReducer')(
+    newState = WHR(dummyReducer, 'dummyReducer')(
       initialState,
       dummyFailureActionCreator({ animal: 'dog' })
     );

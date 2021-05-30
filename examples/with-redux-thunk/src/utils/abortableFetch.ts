@@ -14,7 +14,7 @@ interface IEventCallbacks<T = unknown> {
  * @param options
  * @returns a function that aborts the api call
  */
-const abortableFetch = <T = unknown>(
+export const abortableFetch = <T = unknown>(
   url: RequestInfo,
   options?: RequestInit
 ) => ({ beginCb, successCb, failureCb, cancelCb }: IEventCallbacks<T>) => {
@@ -32,5 +32,3 @@ const abortableFetch = <T = unknown>(
     typeof cancelCb === 'function' && cancelCb();
   };
 };
-
-export default abortableFetch;

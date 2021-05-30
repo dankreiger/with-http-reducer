@@ -1,12 +1,10 @@
-import type { IWithHttpReducerActionTypes } from '../interfaces';
-import { EWithHttpReducerActionPrefixes as P } from '../enums';
+import type { IWHRActionTypes } from '../types/interfaces';
+import { EWHRActionPrefixes as Prefixes } from '../types/enums';
 
-const entries = Object.entries(P);
+const entries = Object.entries(Prefixes);
 
-export const withHttpActionType = (
-  reducerName: string
-): IWithHttpReducerActionTypes =>
+export const withHttpActionType = (reducerName: string): IWHRActionTypes =>
   entries.reduce(
     (acc, [key, value]) => ({ ...acc, [key]: `${value}${reducerName}` }),
-    {} as IWithHttpReducerActionTypes
+    {} as IWHRActionTypes
   );

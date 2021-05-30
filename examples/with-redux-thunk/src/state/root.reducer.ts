@@ -1,11 +1,15 @@
 import { combineReducers } from 'redux';
-import todos from './todos/todos.reducer';
+import { todosReducer } from './todos/todos.reducer';
+
+type AppReducers = {
+  todos: typeof todosReducer;
+};
 
 const appReducers = {
-  todos,
+  todos: todosReducer,
 } as const;
 
-type TReducerKey = keyof typeof appReducers;
+type TReducerKey = keyof AppReducers;
 export type TAppState = Record<
   TReducerKey,
   ReturnType<typeof appReducers[TReducerKey]>
